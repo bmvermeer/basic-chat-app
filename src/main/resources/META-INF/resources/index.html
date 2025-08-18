@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with Personal Assistant</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="text/javascript">
+        var socket = null;
+        var currentService = "pa-gpt4o";
+
+        function connect() {
+            const host = window.location.host;
+            socket = new WebSocket(`ws://${host}/chat`);
+
+            socket.onopen = function () {
+                console.log("WebSocket connected");
+            };
+
+            socket.onmessage = function (event) {
+                showMessage("Assistant: " + event.data);
+            };
+
+            socket.onerror = function (error) {
+                console.error("WebSocket error:", error);
+            };
+
+            socket.onclose = function () {
+                console.log("WebSocket disconnected");
+            };
+        }
+
+        function sendMessage(event) {
+            var messageContent = document.getElementById('messageInput').value;
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(messageContent);
+                showMessage("You: " + messageContent);
+            }
+            document.getElementById('messageInput').value = '';
+            event.preventDefault();
+        }
+
+        function changeService() {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const serviceSelect = document.getElementById('serviceSelect');
+                const selectedService = serviceSelect.value;
+                
+                if (selectedService !== currentService) {
+                    clearChatWindow();
+                    socket.send("SELECT_SERVICE:" + selectedService);
+                    currentService = selectedService;
+                }
+            }
+        }
+
+        function clearChatWindow() {
+            document.getElementById('chatBox').innerHTML = '';
+        }
+
+        function showMessage(message) {
+            var chatBox = document.getElementById('chatBox');
+            var p = document.createElement('p');
+            p.innerHTML = marked.parse(message);
+            chatBox.appendChild(p);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        window.onload = function () {
+            connect();
+            const messageInput = document.getElementById('messageInput');
+            messageInput.addEventListener('keypress', function (event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+                }
+            });
+        };
+    </script>
+</head>
+<body class="d-flex flex-column vh-100">
+<div class="container-fluid d-flex flex-column flex-grow-1">
+    <h1 class="text-center my-4">Chat with Personal Assistant</h1>
+    
+    <div class="row justify-content-center mb-3">
+        <div class="col-md-6">
+            <div class="d-flex justify-content-between align-items-center p-3 border rounded">
+                <label for="serviceSelect" class="font-weight-bold mb-0">Select Assistant:</label>
+                <select id="serviceSelect" class="form-control ml-3" style="width: auto;" onchange="changeService()">
+                    <option value="pa-gpt4o">PA GPT4o</option>
+                    <option value="pa-llama31">PA Llama3.1</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="chat-box flex-grow-1 overflow-auto p-3 border rounded mb-3" id="chatBox" style="height: 500px;">
+            </div>
+
+            <form class="d-flex p-3 border-top justify-content-center" id="chatForm" onsubmit="sendMessage(event)">
+                <textarea id="messageInput" placeholder="Type your message here..." required rows="1" class="form-control me-2"></textarea>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
