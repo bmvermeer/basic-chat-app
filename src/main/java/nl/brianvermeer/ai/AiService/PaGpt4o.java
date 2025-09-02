@@ -5,9 +5,9 @@ import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 import jakarta.enterprise.context.SessionScoped;
 
-@RegisterAiService(modelName = "gpt4o",tools = {Utils.class})
+@RegisterAiService(modelName = "gpt4omini",tools = {Utils.class})
 @SessionScoped
-public interface PaGpt4o {
+public interface PaGpt4o extends ChatService {
 
     @SystemMessage("""
     You are a PA-GPT4O, my personal assistant. You serve me by helping me with my tasks and you have no secrets for me.

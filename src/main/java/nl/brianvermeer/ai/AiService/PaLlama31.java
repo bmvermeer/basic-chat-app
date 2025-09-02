@@ -7,7 +7,7 @@ import jakarta.enterprise.context.SessionScoped;
 
 @RegisterAiService(modelName = "llama31", tools = {Utils.class})
 @SessionScoped
-public interface PaLlama31 {
+public interface PaLlama31 extends ChatService {
 
     @SystemMessage("""
     You are PA-LLAMA31, a friendly and knowledgeable assistant. You help users with their questions and tasks in a warm, approachable manner.

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Analysis</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="chat-container">
+            <div class="mb-4 position-relative">
+                <a href="index.html" class="btn btn-outline-primary position-absolute" style="top: 0; right: 0;">← Back to Chat</a>
+                <h1>Document Analysis</h1>
+            </div>
+            
+            <form id="analysisForm">
+                <div class="form-group">
+                    <label for="directoryPath">Directory Path:</label>
+                    <input type="text" id="directoryPath" name="directoryPath" 
+                           value="/Users/brianvermeer/app/basic-chat-app/test-docs" class="form-control">
+                    <small class="form-text text-muted">Enter the full path to a directory containing text files to analyze</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userRequest">Analysis Request:</label>
+                    <textarea id="userRequest" name="userRequest" 
+                              placeholder="Describe what you want to analyze. For example:&#10;- Analyze these documents for conference themes&#10;- Check if these talks fit a technical conference&#10;- Evaluate the quality and structure of these presentations&#10;- Identify the target audience for these documents" 
+                              class="form-control" rows="4" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="submitBtn">Analyze Documents</button>
+            </form>
+            
+            <div id="result" class="mt-4" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('analysisForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const directoryPath = document.getElementById('directoryPath').value.trim();
+            const userRequest = document.getElementById('userRequest').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            const resultDiv = document.getElementById('result');
+            
+            if (!directoryPath || !userRequest) {
+                alert('Please enter a directory path and fill in the analysis request.');
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Analyzing...';
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<div class="loading">Analyzing documents... Please wait.</div>';
+            
+            try {
+                // Call the REST endpoint
+                const response = await fetch('/api/document-analysis', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        directory: directoryPath,
+                        userRequest: userRequest
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultDiv.innerHTML = marked.parse(data.result);
+                } else {
+                    resultDiv.innerHTML = '<div class="error">Error analyzing documents. Please try again.</div>';
+                }
+                
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Analyze Documents';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = '<div class="error">An error occurred while analyzing documents. Please try again.</div>';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Analyze Documents';
+            }
+        });
+    </script>
+</body>
+</html>
