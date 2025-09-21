@@ -66,6 +66,9 @@ public class ChatBot {
             LOG.error("No service available");
             return "Error: No service available";
         }
+
+        LOG.info("Received message: '{}' (length: {}, bytes: {})", 
+        message, message.length(), message.getBytes().length);
         
         try {
             return currentService.question(message);

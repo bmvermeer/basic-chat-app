@@ -1,0 +1,28 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  # Server-Side Request Forgery (SSRF) in Maven wrapper
+  SNYK-JAVA-ORGAPACHEMAVEN-1234567:
+    - '.mvn/wrapper/MavenWrapperDownloader.java':
+        reason: Maven wrapper generated file, not custom code
+        expires: '2025-12-31T23:59:59.999Z'
+  
+  # Cross-site Scripting (XSS) in docanalysis.html
+  SNYK-JS-1234568:
+    - 'src/main/resources/META-INF/resources/docanalysis.html':
+        reason: Internal tool, not exposed to external users
+        expires: '2025-12-31T23:59:59.999Z'
+
+# language settings (python is auto-detected)
+language-settings:
+  python:
+    # set to true to ignore dev dependencies
+    dev-dependencies: false
+
+
+
+
+
+
