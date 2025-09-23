@@ -19,8 +19,15 @@
             <form id="analysisForm">
                 <div class="form-group">
                     <label for="directoryPath">Directory Path:</label>
-                    <input type="text" id="directoryPath" name="directoryPath" 
-                           value="/Users/brianvermeer/app/basic-chat-app/test-docs" class="form-control">
+                    <div class="input-group">
+                        <input type="text" id="directoryPath" name="directoryPath" 
+                               value="/Users/brianvermeer/app/basic-chat-app/test-docs" class="form-control">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-secondary" id="openInFinderBtn" title="Open in Finder">
+                                📁 Open in Finder
+                            </button>
+                        </div>
+                    </div>
                     <small class="form-text text-muted">Enter the full path to a directory containing text files to analyze</small>
                 </div>
                 
@@ -39,55 +46,54 @@
     </div>
     
     <script>
-        document.getElementById('analysisForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const directoryPath = document.getElementById('directoryPath').value.trim();
-            const userRequest = document.getElementById('userRequest').value.trim();
-            const submitBtn = document.getElementById('submitBtn');
-            const resultDiv = document.getElementById('result');
-            
-            if (!directoryPath || !userRequest) {
-                alert('Please enter a directory path and fill in the analysis request.');
-                return;
-            }
-            
-            // Show loading state
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Analyzing...';
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = '<div class="loading">Analyzing documents... Please wait.</div>';
+        // Open in Finder
+        document.getElementById('openInFinderBtn').onclick = async function() {
+            const path = document.getElementById('directoryPath').value;
+            if (!path) return alert('Enter directory path first');
             
             try {
-                // Call the REST endpoint
+                await fetch('/api/document-analysis/open-directory', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({directory: path})
+                });
+            } catch (e) {
+                alert('Failed to open directory');
+            }
+        };
+
+        // Analyze documents
+        document.getElementById('analysisForm').onsubmit = async function(e) {
+            e.preventDefault();
+            
+            const path = document.getElementById('directoryPath').value;
+            const request = document.getElementById('userRequest').value;
+            if (!path || !request) return alert('Fill in both fields');
+            
+            const btn = document.getElementById('submitBtn');
+            const result = document.getElementById('result');
+            
+            btn.disabled = true;
+            btn.textContent = 'Analyzing...';
+            result.style.display = 'block';
+            result.innerHTML = 'Analyzing...';
+            
+            try {
                 const response = await fetch('/api/document-analysis', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        directory: directoryPath,
-                        userRequest: userRequest
-                    })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({directory: path, userRequest: request})
                 });
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    resultDiv.innerHTML = marked.parse(data.result);
-                } else {
-                    resultDiv.innerHTML = '<div class="error">Error analyzing documents. Please try again.</div>';
-                }
-                
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Analyze Documents';
-                
-            } catch (error) {
-                console.error('Error:', error);
-                resultDiv.innerHTML = '<div class="error">An error occurred while analyzing documents. Please try again.</div>';
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Analyze Documents';
+                const data = await response.json();
+                result.innerHTML = marked.parse(data.result);
+            } catch (e) {
+                result.innerHTML = 'Error analyzing documents';
             }
-        });
+            
+            btn.disabled = false;
+            btn.textContent = 'Analyze Documents';
+        };
     </script>
 </body>
 </html>
