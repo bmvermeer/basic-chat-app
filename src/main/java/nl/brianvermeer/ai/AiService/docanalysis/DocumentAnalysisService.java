@@ -2,8 +2,11 @@ package nl.brianvermeer.ai.AiService.docanalysis;
 
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+
 import io.quarkiverse.langchain4j.RegisterAiService;
+import io.quarkiverse.langchain4j.guardrails.OutputGuardrails;
 import jakarta.enterprise.context.RequestScoped;
+import nl.brianvermeer.ai.AiService.guards.ImgGuard;
 
 @RegisterAiService(modelName = "gpt4omini", tools = {DocumentAnalysisTools.class})
 @RequestScoped
@@ -21,5 +24,6 @@ public interface DocumentAnalysisService {
     {userRequest}
     Output the analysis in markdown format.
     """)
+    // @OutputGuardrails(ImgGuard.class)
     public String analyze(String directory, String userRequest);
 }
