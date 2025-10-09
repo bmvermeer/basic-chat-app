@@ -20,8 +20,8 @@ public interface PaGpt4o extends ChatService {
     You have access to terminal capabilities, which you can use to execute terminal commands when needed.
     You have access to file downloading capabilities, which you can use to download files from the internet when needed.
     """)
-    // @InputGuardrails(InstructionGuard.class)
-    // @OutputGuardrails(ImgGuard.class)
+//     @InputGuardrails(InstructionGuard.class)
+//     @OutputGuardrails(ImgGuard.class)
     public String question(@UserMessage String topic);
 
 

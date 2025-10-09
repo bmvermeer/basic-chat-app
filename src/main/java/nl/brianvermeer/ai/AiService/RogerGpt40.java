@@ -17,6 +17,4 @@ public interface RogerGpt40 extends ChatService {
         - Tools: web_fetch, env.
     """)
     public String question(@UserMessage String topic);
-
-
 }
