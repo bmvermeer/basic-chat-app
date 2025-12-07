@@ -4,9 +4,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import nl.brianvermeer.ai.AiService.ChatService;
 import nl.brianvermeer.ai.AiService.PaGpt4o;
+import nl.brianvermeer.ai.AiService.PaGpt50;
 import nl.brianvermeer.ai.AiService.RogerGpt40;
 import nl.brianvermeer.ai.AiService.RogerGpt35;
 import nl.brianvermeer.ai.AiService.RogerGpt41;
+import nl.brianvermeer.ai.AiService.RogerGpt50;
 import nl.brianvermeer.ai.AiService.RogerLlama32;
 import nl.brianvermeer.ai.AiService.LibraryService;
 import nl.brianvermeer.ai.AiService.docanalysis.DocumentAnalysisService;
@@ -24,17 +26,21 @@ public class ServiceRegistry {
     @Inject
     public ServiceRegistry(
             PaGpt4o paGpt4oService,
+            PaGpt50 paGpt50Service,
             RogerGpt40 rogerGpt40Service,
             RogerGpt35 rogerGpt35Service,
             RogerGpt41 rogerGpt41Service,
+            RogerGpt50 rogerGpt50Service,
             RogerLlama32 rogerLlama32Service,
             LibraryService libraryService,
             DocumentAnalysisService documentAnalysisService) {
         
         services.put(ServiceType.PA_GPT4O_MINI, paGpt4oService);
+        services.put(ServiceType.PA_GPT50_MINI, paGpt50Service);
         services.put(ServiceType.ROGER_GPT4O_MINI, rogerGpt40Service);
         services.put(ServiceType.ROGER_GPT35_TURBO, rogerGpt35Service);
         services.put(ServiceType.ROGER_GPT41_MINI, rogerGpt41Service);
+        services.put(ServiceType.ROGER_GPT50_MINI, rogerGpt50Service);
         services.put(ServiceType.ROGER_LLAMA32, rogerLlama32Service);
         services.put(ServiceType.LIBRARY, libraryService);
         services.put(ServiceType.DOCUMENT_ANALYSIS, documentAnalysisService);
