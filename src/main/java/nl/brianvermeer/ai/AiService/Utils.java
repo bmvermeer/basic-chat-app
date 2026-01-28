@@ -1,7 +1,10 @@
 package nl.brianvermeer.ai.AiService;
 
 import dev.langchain4j.agent.tool.Tool;
+import io.quarkiverse.langchain4j.guardrails.ToolOutputGuardrails;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.POST;
+import nl.brianvermeer.ai.AiService.guards.ToolInstructionGuard;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -11,6 +14,7 @@ import java.net.http.HttpResponse;
 @ApplicationScoped
 public class Utils {
 
+//    @ToolOutputGuardrails(ToolInstructionGuard.class)
     @Tool("Fetch content from a URL")
     public String fetchUrl(String url) {
         System.out.println("Fetching URL: " + url);
@@ -24,6 +28,8 @@ public class Utils {
             return "Error fetching URL: " + e.getMessage();
         }
     }
+
+    @POST
 
     @Tool("Execute a terminal command")
     public String executeTerminalCommand(String command) {

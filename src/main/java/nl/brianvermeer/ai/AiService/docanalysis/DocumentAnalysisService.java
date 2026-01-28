@@ -3,8 +3,9 @@ package nl.brianvermeer.ai.AiService.docanalysis;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 
+import dev.langchain4j.service.guardrail.OutputGuardrails;
 import io.quarkiverse.langchain4j.RegisterAiService;
-import io.quarkiverse.langchain4j.guardrails.OutputGuardrails;
+
 import jakarta.enterprise.context.RequestScoped;
 import nl.brianvermeer.ai.AiService.guards.ImgGuard;
 
@@ -24,6 +25,6 @@ public interface DocumentAnalysisService {
     {userRequest}
     Output the analysis in markdown format.
     """)
-    // @OutputGuardrails(ImgGuard.class)
+//    @OutputGuardrails(ImgGuard.class)
     public String analyze(String directory, String userRequest);
 }

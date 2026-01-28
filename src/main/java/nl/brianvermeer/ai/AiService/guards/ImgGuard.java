@@ -2,12 +2,13 @@ package nl.brianvermeer.ai.AiService.guards;
 
 
 import dev.langchain4j.data.message.AiMessage;
-import io.quarkiverse.langchain4j.guardrails.OutputGuardrail;
-import io.quarkiverse.langchain4j.guardrails.OutputGuardrailResult;
+
+import dev.langchain4j.guardrail.OutputGuardrail;
+import dev.langchain4j.guardrail.OutputGuardrailResult;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class ImgGuard implements OutputGuardrail{
+public class ImgGuard implements OutputGuardrail {
 
     public OutputGuardrailResult validate(AiMessage responseFromLLM) {
 

@@ -2,8 +2,9 @@ package nl.brianvermeer.ai.AiService;
 
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import dev.langchain4j.service.guardrail.InputGuardrails;
 import io.quarkiverse.langchain4j.RegisterAiService;
-import io.quarkiverse.langchain4j.guardrails.InputGuardrails;
+
 import jakarta.enterprise.context.SessionScoped;
 import nl.brianvermeer.ai.AiService.guards.InstructionGuard;
 

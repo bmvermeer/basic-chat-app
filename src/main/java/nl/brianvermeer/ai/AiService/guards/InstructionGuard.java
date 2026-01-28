@@ -1,14 +1,14 @@
 package nl.brianvermeer.ai.AiService.guards;
 
 import dev.langchain4j.data.message.UserMessage;
-import io.quarkiverse.langchain4j.guardrails.InputGuardrail;
-import io.quarkiverse.langchain4j.guardrails.InputGuardrailResult;
+import dev.langchain4j.guardrail.InputGuardrail;
+import dev.langchain4j.guardrail.InputGuardrailResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import nl.brianvermeer.ai.AiService.guards.InstructionCheckService.InstructionCheckResult;
 
 @ApplicationScoped
-public class InstructionGuard implements InputGuardrail{
+public class InstructionGuard implements InputGuardrail {
 
     @Inject
     private InstructionCheckService instructionCheckService;
