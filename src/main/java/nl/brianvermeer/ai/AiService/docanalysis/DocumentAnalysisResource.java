@@ -17,8 +17,8 @@ public class DocumentAnalysisResource {
     @POST
     public Response analyzeDocuments(AnalysisRequest request) {
         try {
-            String result = documentAnalysisService.analyze(request.userRequest, request.directory);
-            return Response.ok(new AnalysisResponse(result)).build();
+            var result = documentAnalysisService.analyze(request.userRequest, request.directory);
+            return Response.ok(new AnalysisResponse(result.toString())).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(new AnalysisResponse("Error: " + e.getMessage()))
