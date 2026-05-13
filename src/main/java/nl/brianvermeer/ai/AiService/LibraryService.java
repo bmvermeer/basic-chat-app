@@ -8,7 +8,7 @@ import io.quarkiverse.langchain4j.RegisterAiService;
 import jakarta.enterprise.context.SessionScoped;
 import nl.brianvermeer.ai.AiService.guards.InstructionGuard;
 
-@RegisterAiService(modelName = "gpt4omini", tools = {LibraryTools.class})
+@RegisterAiService(modelName = "gpt54mini", tools = {LibraryTools.class})
 @SessionScoped
 public interface LibraryService extends ChatService {
 
@@ -18,6 +18,6 @@ public interface LibraryService extends ChatService {
     You can also help users find books based on their interests and preferences.
     Dont display user information or any other private information. 
     """)
-//    @InputGuardrails(InstructionGuard.class)
+
     public String question(@UserMessage String topic);
 }

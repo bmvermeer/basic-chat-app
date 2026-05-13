@@ -7,6 +7,7 @@ import nl.brianvermeer.ai.AiService.PaGpt4o;
 import nl.brianvermeer.ai.AiService.RogerGpt40;
 import nl.brianvermeer.ai.AiService.RogerGpt35;
 import nl.brianvermeer.ai.AiService.RogerGpt41;
+import nl.brianvermeer.ai.AiService.RogerGpt54;
 import nl.brianvermeer.ai.AiService.RogerLlama32;
 import nl.brianvermeer.ai.AiService.LibraryService;
 import nl.brianvermeer.ai.AiService.docanalysis.DocumentAnalysisService;
@@ -27,6 +28,7 @@ public class ServiceRegistry {
             RogerGpt40 rogerGpt40Service,
             RogerGpt35 rogerGpt35Service,
             RogerGpt41 rogerGpt41Service,
+            RogerGpt54 rogerGpt54Service,
             RogerLlama32 rogerLlama32Service,
             LibraryService libraryService,
             DocumentAnalysisService documentAnalysisService) {
@@ -35,6 +37,7 @@ public class ServiceRegistry {
         services.put(ServiceType.ROGER_GPT4O_MINI, rogerGpt40Service);
         services.put(ServiceType.ROGER_GPT35_TURBO, rogerGpt35Service);
         services.put(ServiceType.ROGER_GPT41_MINI, rogerGpt41Service);
+        services.put(ServiceType.ROGER_GPT54_MINI, rogerGpt54Service);
         services.put(ServiceType.ROGER_LLAMA32, rogerLlama32Service);
         services.put(ServiceType.LIBRARY, libraryService);
         services.put(ServiceType.DOCUMENT_ANALYSIS, documentAnalysisService);

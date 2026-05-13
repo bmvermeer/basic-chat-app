@@ -8,6 +8,7 @@ public enum ServiceType {
     PA_GPT4O_MINI("pa-gpt4omini", "PA GPT4o Mini"),
     ROGER_GPT35_TURBO("roger-gpt35turbo", "Roger GPT3.5 Turbo"),
     ROGER_GPT41_MINI("roger-gpt41mini", "Roger GPT 4.1 Mini"),
+    ROGER_GPT54_MINI("roger-gpt54mini", "Roger GPT 5.4 Mini"),
     ROGER_LLAMA32("roger-llama32", "Roger Llama3.2"),
     LIBRARY("library", "Library Service"),
     DOCUMENT_ANALYSIS("docanalysis", "Document Analysis Service");
