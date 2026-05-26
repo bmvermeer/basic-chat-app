@@ -67,13 +67,13 @@
 
         window.onload = function () {
             var serviceParam = getUrlParameter('service') || DEFAULT_SERVICE;
-            
+
             // Set the dropdown to the current service
             var select = document.getElementById('assistantSelect');
             select.value = serviceParam;
-            
+
             connect();
-            
+
             const messageInput = document.getElementById('messageInput');
             messageInput.addEventListener('keypress', function (event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
@@ -89,41 +89,45 @@
 <div class="container">
     <div class="chat-container">
         <div class="mb-4 position-relative">
-            <a href="notes.md" class="btn btn-outline-primary position-absolute" style="top: 0; right: 0;" target="_blank">View Notes</a>
-            <a href="docanalysis.html" class="btn btn-outline-secondary position-absolute" style="top: 0; right: 120px;" target="_blank">Document Analysis</a>
+            <a href="notes.md" class="btn btn-outline-primary position-absolute" style="top: 0; right: 0;"
+               target="_blank">View Notes</a>
+            <a href="docanalysis.html" class="btn btn-outline-secondary position-absolute" style="top: 0; right: 120px;"
+               target="_blank">Document Analysis</a>
             <h1>Chat with Personal Assistant</h1>
         </div>
-    
-    <div class="row justify-content-center mb-3">
-        <div class="col-md-8">
-            <div class="d-flex justify-content-between align-items-center p-3 border rounded">
-                <label class="font-weight-bold mb-0">Select Assistant:</label>
-                <div class="ml-3">
+
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-8">
+                <div class="d-flex justify-content-between align-items-center p-3 border rounded">
+                    <label class="font-weight-bold mb-0">Select Assistant:</label>
+                    <div class="ml-3">
                         <select id="assistantSelect" class="form-control" onchange="changeAssistant()">
-                           <option value="roger-llama32">Roger Llama 3.2</option>
-                         <option value="roger-gpt35turbo">Roger GPT 3.5 Turbo</option>
-                         <option value="roger-gpt41mini">Roger GPT 4.1 Mini</option>
-<!--                         <option value="roger-gpt54mini">Roger GPT 5.4 Mini</option>-->
-                         <option value="roger-gpt4omini">Roger GPT 4o Mini</option>
-                         <option value="library">Library Service</option>
-                         <option value="pa-gpt4omini">PA GPT 4o Mini</option>
-                     </select>
+                            <option value="roger-llama32">Roger Llama 3.2</option>
+                            <option value="roger-gpt35turbo">Roger GPT 3.5 Turbo</option>
+                            <option value="roger-gpt41mini">Roger GPT 4.1 Mini</option>
+                            <option value="roger-gpt4omini">Roger GPT 4o Mini</option>
+                            <option value="roger-gpt54mini">Roger GPT 5.4 Mini</option>
+                            <option value="library">Library Service</option>
+                            <option value="pa-gpt4omini">PA GPT 4o Mini</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="chat-box flex-grow-1 overflow-auto p-3 border rounded mb-3" id="chatBox" style="height: 500px;">
-            </div>
 
-            <form class="d-flex p-3 border-top justify-content-center" id="chatForm" onsubmit="sendMessage(event)">
-                <textarea id="messageInput" placeholder="Type your message here..." required rows="2" class="form-control me-2"></textarea>
-                <button type="submit" class="btn btn-primary">Send</button>
-            </form>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="chat-box flex-grow-1 overflow-auto p-3 border rounded mb-3" id="chatBox"
+                     style="height: 500px;">
+                </div>
+
+                <form class="d-flex p-3 border-top justify-content-center" id="chatForm" onsubmit="sendMessage(event)">
+                    <textarea id="messageInput" placeholder="Type your message here..." required rows="2"
+                              class="form-control me-2"></textarea>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+            </div>
         </div>
-    </div>
     </div>
 </div>
 </body>
