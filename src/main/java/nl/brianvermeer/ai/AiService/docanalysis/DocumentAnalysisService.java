@@ -3,11 +3,10 @@ package nl.brianvermeer.ai.AiService.docanalysis;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 
-import dev.langchain4j.service.guardrail.OutputGuardrails;
+import dev.langchain4j.service.guardrail.InputGuardrails;
 import io.quarkiverse.langchain4j.RegisterAiService;
 
 import jakarta.enterprise.context.RequestScoped;
-import nl.brianvermeer.ai.AiService.guards.ImgGuard;
 
 @RegisterAiService(modelName = "gpt4omini", tools = {DocumentAnalysisTools.class})
 @RequestScoped

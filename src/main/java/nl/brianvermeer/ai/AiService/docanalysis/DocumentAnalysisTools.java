@@ -1,7 +1,10 @@
 package nl.brianvermeer.ai.AiService.docanalysis;
 
 import dev.langchain4j.agent.tool.Tool;
+import io.quarkiverse.langchain4j.guardrails.ToolOutputGuardrails;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,6 +16,9 @@ import java.util.stream.Stream;
 
 @ApplicationScoped
 public class DocumentAnalysisTools {
+
+    @Inject
+    SanitizationService sanitizationService;
 
     @Tool("Get all file content from a directory")
     public String analyzeDirectory(String directoryPath) {
@@ -32,6 +38,7 @@ public class DocumentAnalysisTools {
             for (Path file : textFiles) {
                 analysis.append("=== File: ").append(file.getFileName()).append(" ===\n");
                 String content = readFileContent(file);
+//                content = sanitizationService.sanitize(content).sanitizedText();
                 analysis.append(content).append("\n\n");
             }
 
