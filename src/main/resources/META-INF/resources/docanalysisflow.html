@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Analysis (Agent Flow)</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="theme.js"></script>
+</head>
+<body>
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+    <div class="container">
+        <div class="chat-container">
+            <div class="mb-4 position-relative">
+                <a href="index.html" class="btn btn-outline-primary position-absolute" style="top: 0; right: 0;">← Back to Chat</a>
+                <h1>Document Analysis (Agent Flow)</h1>
+            </div>
+            
+            <form id="analysisForm">
+                <div class="form-group">
+                    <label for="directoryPath">Directory Path:</label>
+                    <div class="input-group">
+                        <input type="text" id="directoryPath" name="directoryPath" 
+                               value="/Users/brianvermeer/app/basic-chat-app/test-docs" class="form-control">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-secondary" id="openInFinderBtn" title="Open in Finder">
+                                📁 Open in Finder
+                            </button>
+                        </div>
+                    </div>
+                    <small class="form-text text-muted">Enter the full path to a directory containing text files to analyze</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userRequest">Analysis Request:</label>
+                    <textarea id="userRequest" name="userRequest" 
+                              placeholder="Describe what you want to analyze. For example:&#10;- Analyze these documents for conference themes&#10;- Check if these talks fit a technical conference&#10;- Evaluate the quality and structure of these presentations&#10;- Identify the target audience for these documents" 
+                              class="form-control" rows="4" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="submitBtn">Analyze Documents</button>
+            </form>
+            
+            <div id="result" class="mt-4" style="display: none;"></div>
+            <details id="removedPanel" class="mt-3" style="display: none;">
+                <summary>Sanitizer: removed instructions</summary>
+                <div id="removedList" class="mt-2"></div>
+            </details>
+        </div>
+    </div>
+    
+    <script>
+        // Open in Finder
+        document.getElementById('openInFinderBtn').onclick = async function() {
+            const path = document.getElementById('directoryPath').value;
+            if (!path) return alert('Enter directory path first');
+            
+            try {
+                await fetch('/api/document-analysis-flow/open-directory', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({directory: path})
+                });
+            } catch (e) {
+                alert('Failed to open directory');
+            }
+        };
+
+        function renderRemoved(docs) {
+            const panel = document.getElementById('removedPanel');
+            const list = document.getElementById('removedList');
+            list.innerHTML = '';
+            docs.forEach(function(d) {
+                const h = document.createElement('strong');
+                h.textContent = d.fileName;
+                list.appendChild(h);
+                const ul = document.createElement('ul');
+                const removed = d.removedInstructions || [];
+                if (removed.length === 0) {
+                    const li = document.createElement('li');
+                    li.textContent = 'Nothing removed';
+                    ul.appendChild(li);
+                }
+                removed.forEach(function(r) {
+                    const li = document.createElement('li');
+                    li.textContent = r;
+                    ul.appendChild(li);
+                });
+                list.appendChild(ul);
+            });
+            panel.style.display = docs.length ? 'block' : 'none';
+            panel.open = docs.some(function(d) { return (d.removedInstructions || []).length > 0; });
+        }
+
+        // Analyze documents
+        document.getElementById('analysisForm').onsubmit = async function(e) {
+            e.preventDefault();
+            
+            const path = document.getElementById('directoryPath').value;
+            const request = document.getElementById('userRequest').value;
+            if (!path || !request) return alert('Fill in both fields');
+            
+            const btn = document.getElementById('submitBtn');
+            const result = document.getElementById('result');
+            
+            btn.disabled = true;
+            btn.textContent = 'Analyzing...';
+            result.style.display = 'block';
+            result.innerHTML = 'Analyzing...';
+            document.getElementById('removedPanel').style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/document-analysis-flow', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({directory: path, userRequest: request})
+                });
+                
+                const data = await response.json();
+                result.innerHTML = marked.parse(data.result);
+                renderRemoved(data.sanitizedDocuments || []);
+            } catch (e) {
+                result.innerHTML = 'Error analyzing documents';
+            }
+            
+            btn.disabled = false;
+            btn.textContent = 'Analyze Documents';
+        };
+    </script>
+</body>
+</html>
